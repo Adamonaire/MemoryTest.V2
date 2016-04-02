@@ -14,7 +14,24 @@ namespace MemoryTest.V2
 
         public Form1()
         {
-            InitializeComponent();           
+            InitializeComponent();
+
+            pictureBox1.BackColor = Color.Transparent;
+            pictureBox2.BackColor = Color.Transparent;
+            pictureBox3.BackColor = Color.Transparent;
+            pictureBox4.BackColor = Color.Transparent;
+            pictureBox5.BackColor = Color.Transparent;
+            pictureBox6.BackColor = Color.Transparent;
+            pictureBox7.BackColor = Color.Transparent;
+            pictureBox8.BackColor = Color.Transparent;
+            pictureBox9.BackColor = Color.Transparent;
+            pictureBox10.BackColor = Color.Transparent;
+            pictureBox11.BackColor = Color.Transparent;
+            pictureBox12.BackColor = Color.Transparent;
+            pictureBox13.BackColor = Color.Transparent;
+            pictureBox14.BackColor = Color.Transparent;
+            pictureBox15.BackColor = Color.Transparent;
+            pictureBox16.BackColor = Color.Transparent;
         }
 
         PictureBox texture;
@@ -124,6 +141,11 @@ namespace MemoryTest.V2
                     count = 0;
                 }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
