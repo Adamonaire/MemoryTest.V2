@@ -14,6 +14,7 @@ namespace MemoryTest.V2
 
         public Form1()
         {
+            // Lägger till transparent bakgrund till bilderna
             InitializeComponent();
 
             pictureBox1.BackColor = Color.Transparent;
@@ -38,10 +39,12 @@ namespace MemoryTest.V2
             
         int count = 0;
 
-        int remaining = 8;
+        //int remaining = 8;
 
         private void DefaultPicture()
         {
+            // Brickorna ska ha loggan som bild från början
+
             foreach (Control x in this.Controls)
             {
                 if (x is PictureBox)
@@ -49,9 +52,12 @@ namespace MemoryTest.V2
                     (x as PictureBox).Image = Properties.Resources._0;
                 }
             }
+
         }
+
         private void CheckPicture()
         {
+            // Kollar bilderna om det går att trycka på dem
             foreach (Control x in this.Controls)
             {
                 if (x is PictureBox)
@@ -59,19 +65,24 @@ namespace MemoryTest.V2
                     (x as PictureBox).Tag = "0";
                 }
             }
+
         }
+
         private void TagPicture()
         {
+            //Trycker du på bilden ska arrayen av bilden slumpa bilderna
+
             int[] pictureArray = new int[16];
             Random random1 = new Random();
 
             int i = 0;
+
             while (i < 16)
             {
-                int rast = random1.Next(1, 17);
+                int randomCount = random1.Next(1, 16);
                 if (Array.IndexOf(pictureArray, random1) == -1)
                 {
-                    pictureArray[i] = rast;
+                    pictureArray[i] = randomCount;
                     i++;
                 }
 
@@ -91,26 +102,36 @@ namespace MemoryTest.V2
                     b++;
                 }
             }
+
         }
-        private void TextureMatch(PictureBox lastTexture, PictureBox nextTexture)
+        private void textureMatch(PictureBox lastTexture, PictureBox nextTexture)
         {
-            if (lastTexture == nextTexture)
+            // Bestämmer vad som händer om man får dubblett
+            // DoEvents() för att förlänga eventerna med Sleep(500)
+
+            if (lastTexture.Tag.ToString() == nextTexture.Tag.ToString())
             {
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(500);
                 lastTexture.Visible = false;
-                nextTexture.Visible = false;
-                remaining--;
-                texture.Dispose();
+                nextTexture.Visible = false;             
+                //remaining--;
             }
+
             else
             {
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(500);
                 lastTexture.Image = Image.FromFile("0.png");
-                nextTexture.Image = Image.FromFile("0.png");
-                texture.Dispose();
+                nextTexture.Image = Image.FromFile("0.png");               
             }
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            this.Text = "League of Memory";
+
             DefaultPicture();
             CheckPicture();
             TagPicture();
@@ -118,9 +139,10 @@ namespace MemoryTest.V2
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
+            //Vänder brickorna efter klick på texturrutorna
             PictureBox currentTexture = (sender as PictureBox);
 
-            (sender as PictureBox).Image = Image.FromFile((sender as PictureBox).Tag.ToString() + ".png");
+            currentTexture.Image = Image.FromFile((sender as PictureBox).Tag.ToString() + ".png");
 
             if (count == 0)
             {
@@ -131,21 +153,76 @@ namespace MemoryTest.V2
             {
                 if (texture == currentTexture)
                 {
-                    MessageBox.Show("Good Job!");
+                    MessageBox.Show("You Can't Do That!");
                     count = 0;
                     texture.Image = Image.FromFile("0.png"); 
                 }
                 else
                 {
-                    TextureMatch(texture, currentTexture);
+                    textureMatch(texture, currentTexture);
                     count = 0;
                 }
             }
-        }
 
+        }
+        private void ShowPictures()
+        {
+            // Visa vilka bilder som gömmer sig under loggan på alla brickorna
+            foreach (Control x in this.Controls)
+            {
+                if (x is PictureBox)
+                {
+                    (x as PictureBox).Image = Image.FromFile(x.Tag.ToString() + ".png");
+                }
+            }
+        }
+        private void HidePictures()
+        {
+            //Vänder tillbaka brickorna igen
+            foreach (Control x in this.Controls)
+            {
+                if (x is PictureBox)
+                {
+                    (x as PictureBox).Image = Image.FromFile("0.png");
+                }
+            }
+        }
+        private void Restart()
+        {
+            //Startar om spelet och vänder brickorna
+            foreach (Control x in this.Controls)
+            {
+                if (x is PictureBox)
+                {
+                    (x as PictureBox).Visible = true;
+                }
+            }
+        }
         private void button1_Click(object sender, EventArgs e)
         {
+            //Stänger av applikationen
             Application.Exit();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            // Laddar in metoderna efter hur händelserna ska ske
+            ShowPictures();
+
+            Application.DoEvents();
+            System.Threading.Thread.Sleep(500);
+
+            HidePictures();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //Startar om spelet genom att ladda om allting igen efter tryck på restartknappen
+            DefaultPicture();
+            CheckPicture();
+            TagPicture();
+            Restart();
+            count = 0;
         }
     }
 }
